@@ -12,9 +12,9 @@ $(OBJS): $(SRCS)
 	gcc -I libft -c $(SRCS)
 
 clean:
-	-rm $(OBJS)
+	-rm -f $(OBJS)
 
 fclean: clean
-	-rm $(NAME)
+	-rm -f $(NAME)
 
 re: fclean all

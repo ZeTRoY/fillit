@@ -6,7 +6,7 @@
 /*   By: ibarabas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 11:59:22 by ibarabas          #+#    #+#             */
-/*   Updated: 2018/04/06 13:24:54 by ibarabas         ###   ########.fr       */
+/*   Updated: 2018/04/11 17:02:23 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int main(int ac, char **av)
 	printf("\n");
 	while (piece != NULL)
 	{
-		printf("%d%s:\n", i++, "-я фигура");
+		printf("%d%s:\n", i++, "- я фигура");
 		int j = 0;
 		while (j < 4)
 		{
