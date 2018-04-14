@@ -6,7 +6,7 @@
 /*   By: ibarabas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 11:59:49 by ibarabas          #+#    #+#             */
-/*   Updated: 2018/04/11 16:36:40 by aroi             ###   ########.fr       */
+/*   Updated: 2018/04/14 18:00:37 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,36 +17,99 @@
 # define Y 1
 
 # include <fcntl.h>
+# include <unistd.h>
+# include <stdlib.h>
 
-typedef struct			s_data_obj
+typedef struct		s_piece
 {
-	struct s_data_obj	*up;
-	struct s_data_obj	*down;
-	struct s_data_obj	*left;
-	struct s_data_obj	*right;
-	struct s_c_header	*column;
-}						t_data_obj;
+	char			points[4][2];
+	struct s_piece	*prev;
+	struct s_piece	*next;
+	struct s_node	*column;
+	char			id;
+}					t_piece;
 
-typedef struct			s_c_header
+typedef struct		s_node
 {
-	struct s_c_header	*up;
-	struct s_c_header	*down;
-	struct s_c_header	*left;
-	struct s_c_header	*right;
-	struct s_c_header	*column;
-	char				name;
-	unsigned int		size;
-}						t_c_header;
+	char			pos[2];
+	struct s_node	*up;
+	struct s_node	*down;
+	struct s_piece	*head;
+}					t_node;
 
-typedef struct			s_piece
+typedef struct		s_hidden
 {
-	char 				points[4][2];
-	struct s_piece		*next;
-	struct s_piece		*prev;
-}						t_piece;
+	struct s_node	*node;
+	struct s_hidden	*next;
+}					t_hidden;
 
-int						get_next_piece(const int fd, char **dest);
-t_piece					*get_pieces(int fd);
-int						solve(t_piece *piece);
+typedef struct		s_sol
+{
+	struct s_piece	*piece;
+	struct s_node	*position;
+	struct s_sol	*next;
+}					t_sol;
+
+/*
+**	Функции из библиотеки libft
+*/
+
+int					ft_strlen(const char *s);
+void				ft_putstr(char const *s);
+void				ft_putendl(char const *s);
+void				ft_puterr(char const *s);
+void				ft_endl(void);
+void				ft_bzero(void *s, size_t n);
+
+/*
+**	Функции расположены в порядке использования
+*/
+
+/*
+**	get_next_piece.c
+**	Читает 21 символ из fd в *dest,
+**	получая следующую фигуру в виде строки.
+*/
+
+int					get_next_piece(const int fd, char **dest);
+
+/*
+**	get_pieces.c
+**	Обрабатывает полученную строку
+**	Возвращает список структур t_piece,
+**	содержащих координаты четырех точек,
+**	занимаемых фигурой
+*/
+
+t_piece				*get_pieces(int fd);
+void				shift(t_piece *piece);
+
+char				get_minimum_square(t_piece *root);
+
+/*
+**	make_table.c
+**	Для каждой фигуры создаёт колонку
+**	с её возможными расположениями
+**	Получается замкнутый двухмерный список
+*/
+
+int					make_table(t_piece *root, int size);
+
+t_hidden			*hide(t_piece *root, t_node *placement);
+void				unhide(t_hidden *hidden, t_piece *col);
+
+void				node_set_hidden(t_node *node, int hidden);
+void				col_set_hidden(t_piece *piece, int hidden);
+
+/*
+**	solve.c
+**	Использует метод dancing links,
+**	Чтобы найти решение.
+*/
+
+int					solve(t_piece *root, t_sol *sols);
+
+
+void		print_solution(t_sol *solution, int size);
 
 #endif
