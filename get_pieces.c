@@ -6,7 +6,7 @@
 /*   By: ibarabas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 10:26:39 by ibarabas          #+#    #+#             */
-/*   Updated: 2018/04/14 15:11:14 by ibarabas         ###   ########.fr       */
+/*   Updated: 2018/04/15 13:26:15 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ int		add_everything(int fd, int n, t_piece *pieces, t_piece *root)
 		return (-1);
 	if (endl != '\0')
 		return (-1);
+	free(str);
 	return (0);
 }
 

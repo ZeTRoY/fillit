@@ -6,11 +6,12 @@
 /*   By: ibarabas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 12:50:46 by ibarabas          #+#    #+#             */
-/*   Updated: 2018/04/14 17:52:38 by aroi             ###   ########.fr       */
+/*   Updated: 2018/04/15 14:32:03 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
+#include <stdio.h>
 
 /*
 **	Все фигуры состоят из четырех ячеек.
@@ -38,14 +39,9 @@ char		get_minimum_square(t_piece *root)
 	return (size);
 }
 
-/*
-**	Проверяет, есть ли надежда на решение
-**	(её нет, если одна из колонок пуста)
-*/
-
 int			there_is_hope(t_piece *root)
 {
-	t_piece	*col;
+	t_piece *col;
 
 	col = root->next;
 	while (col != root)
@@ -76,18 +72,20 @@ int			loop(t_piece *root, t_sol *sols, t_piece **col, t_node *row)
 		new_sol->next->position = row;
 		new_sol->next->next = NULL;
 		if (solve(root, sols) == 42)
+		{
+			unhide(hidden, (*col));
 			return (42);
+		}
 		free(new_sol->next);
 		new_sol->next = NULL;
 		unhide(hidden, (*col));
 		row = row->down;
 	}
-	(*col) = (*col)->next;
 	return (0);
 }
 
 /*
-**	Применяет неведомую магию, чтобы найти решение
+**	Находит решение методом танцующих бубнов
 */
 
 int			solve(t_piece *root, t_sol *sols)
@@ -99,7 +97,7 @@ int			solve(t_piece *root, t_sol *sols)
 	if (root->next == root)
 		return (42);
 	col = root->next;
-	while (col != root && there_is_hope(root))
+	if (there_is_hope(root))
 	{
 		rvalue = loop(root, sols, &col, row);
 		if (rvalue == 42)

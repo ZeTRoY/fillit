@@ -6,7 +6,7 @@
 /*   By: ibarabas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 11:59:49 by ibarabas          #+#    #+#             */
-/*   Updated: 2018/04/14 18:00:37 by aroi             ###   ########.fr       */
+/*   Updated: 2018/04/15 12:35:42 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void				col_set_hidden(t_piece *piece, int hidden);
 
 int					solve(t_piece *root, t_sol *sols);
 
-
-void		print_solution(t_sol *solution, int size);
+void				free_node(t_node *rootnode);
+void				free_piece(t_piece *root);
 
 #endif

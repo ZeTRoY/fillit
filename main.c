@@ -6,11 +6,12 @@
 /*   By: ibarabas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 11:59:22 by ibarabas          #+#    #+#             */
-/*   Updated: 2018/04/14 18:05:16 by aroi             ###   ########.fr       */
+/*   Updated: 2018/04/15 14:32:48 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
+#include <stdio.h>
 
 /*
 **	Подготавливает строку для печати
@@ -21,11 +22,13 @@ void	prepare_for_printing(t_sol *solution, int size, char *board)
 	int		i;
 	char	x;
 	char	y;
+	t_sol	*tmp;
 
-	while (solution != NULL)
+	free(solution->piece->prev);
+	while (solution)
 	{
 		i = -1;
-		while (i++ < 4)
+		while (++i < 4)
 		{
 			x = solution->piece->points[i][X];
 			x += solution->position->pos[X];
@@ -33,13 +36,16 @@ void	prepare_for_printing(t_sol *solution, int size, char *board)
 			y += solution->position->pos[Y];
 			board[x * size + y] = solution->piece->id;
 		}
+		tmp = solution;
 		solution = solution->next;
+		free_piece(tmp->piece);
+		free(tmp);
 	}
 }
 
 void	print_solution(t_sol *solution, int size)
 {
-	char	board[size * size + 10];
+	char	board[size * size + 1];
 	char	x;
 	char	y;
 	int		i;
@@ -54,7 +60,7 @@ void	print_solution(t_sol *solution, int size)
 		x = 0;
 		while (x < size)
 		{
-			write(1, &(board[x * size + y]), 1);
+			write(1, &board[x * size + y], 1);
 			x++;
 		}
 		ft_endl();
@@ -110,7 +116,9 @@ int		main(int ac, char **av)
 		if (solve(root, sols) == 42)
 		{
 			print_solution(sols->next, size);
+			free(sols);
 			close(fd);
+			system("leaks fillit");
 			return (0);
 		}
 	}
