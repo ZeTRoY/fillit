@@ -6,7 +6,7 @@
 /*   By: ibarabas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/06 12:50:46 by ibarabas          #+#    #+#             */
-/*   Updated: 2018/04/15 14:32:03 by aroi             ###   ########.fr       */
+/*   Updated: 2018/04/16 15:22:43 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,13 @@ int			there_is_hope(t_piece *root)
 	return (1);
 }
 
+void		new_new_sol(t_sol **new_sol, t_piece *col, t_node *row)
+{
+	(*new_sol)->next->piece = col;
+	(*new_sol)->next->position = row;
+	(*new_sol)->next->next = NULL;
+}
+
 int			loop(t_piece *root, t_sol *sols, t_piece **col, t_node *row)
 {
 	t_hidden	*hidden;
@@ -68,9 +75,7 @@ int			loop(t_piece *root, t_sol *sols, t_piece **col, t_node *row)
 			new_sol = new_sol->next;
 		if (!(new_sol->next = (t_sol *)malloc(sizeof(t_sol))))
 			return (-1);
-		new_sol->next->piece = (*col);
-		new_sol->next->position = row;
-		new_sol->next->next = NULL;
+		new_new_sol(&new_sol, *col, row);
 		if (solve(root, sols) == 42)
 		{
 			unhide(hidden, (*col));

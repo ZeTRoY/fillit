@@ -6,7 +6,7 @@
 /*   By: ibarabas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 11:59:22 by ibarabas          #+#    #+#             */
-/*   Updated: 2018/04/15 14:32:48 by aroi             ###   ########.fr       */
+/*   Updated: 2018/04/16 15:13:20 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,33 +93,40 @@ void	clear_table(t_piece *root)
 	}
 }
 
-int		main(int ac, char **av)
+void	main_solve(t_piece *root, int fd)
 {
-	int		fd;
-	char	*buf;
-	char	size;
-	t_piece	*root;
 	t_sol	*sols;
+	char	size;
 
-	if (ac != 2)
-		ft_puterr("usage: fillit source_file");
-	fd = open(av[1], O_RDONLY);
-	if ((root = get_pieces(fd)) == NULL)
-		ft_puterr("error");
 	size = get_minimum_square(root) - 1;
 	while (size++)
 	{
 		clear_table(root);
 		make_table(root, size);
-		sols = (t_sol *)malloc(sizeof(t_sol));
+		if (!(sols = (t_sol *)malloc(sizeof(t_sol))))
+			ft_puterr("error");
 		sols->next = NULL;
 		if (solve(root, sols) == 42)
 		{
 			print_solution(sols->next, size);
 			free(sols);
 			close(fd);
-			system("leaks fillit");
-			return (0);
+			return ;
 		}
 	}
+}
+
+int		main(int ac, char **av)
+{
+	int		fd;
+	char	*buf;
+	t_piece	*root;
+
+	if (ac != 2)
+		ft_puterr("usage: fillit source_file");
+	fd = open(av[1], O_RDONLY);
+	if ((root = get_pieces(fd)) == NULL)
+		ft_puterr("error");
+	main_solve(root, fd);
+	return (0);
 }
