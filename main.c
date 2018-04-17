@@ -6,7 +6,7 @@
 /*   By: ibarabas <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/03 11:59:22 by ibarabas          #+#    #+#             */
-/*   Updated: 2018/04/16 15:13:20 by aroi             ###   ########.fr       */
+/*   Updated: 2018/04/17 13:11:03 by ibarabas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,12 @@ void	main_solve(t_piece *root, int fd)
 		{
 			print_solution(sols->next, size);
 			free(sols);
+			sols = NULL;
 			close(fd);
-			return ;
+			exit(0);
 		}
+		free(sols);
+		sols = NULL;
 	}
 }
 
